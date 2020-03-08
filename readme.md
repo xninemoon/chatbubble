@@ -18,7 +18,7 @@ pop(document.querySelector("#container-left"),  {
 })
 
 pop(document.querySelector("#container-top"),  {
-    content: "测试聊天气泡3",
+    content: "<p>🐶</p>测试聊天气泡3",
     sharpAngleMarginEnd: 10,
     position: "north",
 })
@@ -29,3 +29,8 @@ pop(document.querySelector("#container-bottom"),  {
     position: "south",
 })
 ```
+
+## 函数说明
+见 [./src/chat.bubble.ts](./src/chat.bubble.ts);
+
+![](./docs/imgs/2.png)

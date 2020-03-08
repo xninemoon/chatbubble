@@ -13,7 +13,7 @@ pop(document.querySelector("#container-left"),  {
 })
 
 pop(document.querySelector("#container-top"),  {
-    content: "测试聊天气泡3",
+    content: "<p>🐶</p>测试聊天气泡3",
     sharpAngleMarginEnd: 10,
     position: "north",
 })

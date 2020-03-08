@@ -14,9 +14,6 @@ export function template(tmpl: string, data: any) {
         .replace(/<%|\$>/g, "`);")
         .replace(/%>|<\$/g, "p.push(`");
     result += "`); return p.join('');";
-    console.log(data);
-    console.log(result);
-    
     
     return new Function(result).apply(data); // apply改变函数执行的作用域
 }

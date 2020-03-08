@@ -19,9 +19,9 @@ const tmpl = `
     }
     
     .{{this.key}}-chat-bubble-container {
-        background-color: white;
-        padding: 10px;
-        border-radius: 3px;
+        background-color: {{this.backgroundColor}};
+        border-radius: {{this.bubbleRadius}}px;
+        padding: {{this.bubblePadding}};
         display: inline-block;
     }
     
@@ -32,7 +32,7 @@ const tmpl = `
         switch(this.position){
             case "north":
                 <$
-                border-color: transparent transparent white transparent;
+                border-color: transparent transparent {{this.backgroundColor}} transparent;
                 $>
                 if(this.sharpAngleMarginEnd){
                     <$
@@ -50,7 +50,7 @@ const tmpl = `
                 break;
             case "south":
                 <$
-                border-color: white transparent  transparent transparent;
+                border-color: {{this.backgroundColor}} transparent  transparent transparent;
                 $>
                 if(this.sharpAngleMarginEnd){
                     <$
@@ -68,7 +68,7 @@ const tmpl = `
                 break;
             case "east":
                 <$
-                border-color: transparent transparent transparent white;
+                border-color: transparent transparent transparent {{this.backgroundColor}};
                 $>
                 if(this.sharpAngleMarginEnd){
                     <$
@@ -86,7 +86,7 @@ const tmpl = `
                 break;
             case "west":
                 <$
-                border-color: transparent white transparent transparent ;
+                border-color: transparent {{this.backgroundColor}} transparent transparent ;
                 $>
                 if(this.sharpAngleMarginEnd){
                     <$
@@ -117,15 +117,15 @@ const tmpl = `
             case "north":
             case "west":
                 <$
-                <div class="{{this.key}}-chat-bubble-sharp-angle {{this.sharpAngleCss!''}}"></div>
-                <div class="{{this.key}}-chat-bubble-container {{this.contentCss!''}}">{{this.content!''}}</div>
+                <div class="{{this.key}}-chat-bubble-sharp-angle"></div>
+                <div class="{{this.key}}-chat-bubble-container">{{this.content!''}}</div>
                 $>
                 break;
             case "south":
             case "east":
                 <$
-                <div class="{{this.key}}-chat-bubble-container">{{this.content}}</div>
-                <div class="{{this.key}}-chat-bubble-sharp-angle  {{this.sharpAngleCss!''}}"></div>
+                <div class="{{this.key}}-chat-bubble-container">{{this.content!''}}</div>
+                <div class="{{this.key}}-chat-bubble-sharp-angle"></div>
                 $>
                 break;
         }
@@ -135,17 +135,19 @@ const tmpl = `
 
 
 export interface PopSettings {
-    key?: string;
-    content?: string;
-    sharpAngleMarginStart?: number;
-    sharpAngleMarginEnd?: number;
-    contentCss?: string;
-    sharpAngleCss?: string;
+    key?: string;  // id, 如果不设置将使用 guid
+    content?: string; // 气泡内容 html 
+    bubblePadding?: string; // 气泡 padding
+    bubbleRadius?: number; // 气泡圆角
+    sharpAngleWidth?: number; // 尖角宽度
+    sharpAngleMarginStart?: number; // 尖角与上或者左的距离
+    sharpAngleMarginEnd?: number; // 尖角与下或者右的距离，如果同时设置sharpAngleMarginStart和sharpAngleMarginEnd，优先应用sharpAngleMarginEnd
+    backgroundColor?:string; // 背景颜色
     position?: "north" | "west" | "south" | "east";
 }
 
 const guid = () => {
-    return 'css-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function (c) {
+    return 'css-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function (c) {
         const r = Math.random() * 16 | 0;
         const v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
@@ -154,6 +156,10 @@ const guid = () => {
 
 export const pop = (element: HTMLElement, settings: PopSettings)=>{
     settings.key = settings.key || guid();
+    settings.backgroundColor = settings.backgroundColor || "white";
+    settings.sharpAngleWidth = settings.sharpAngleWidth || 7;
+    settings.bubbleRadius = settings.bubbleRadius || 5;
+    settings.bubblePadding = settings.bubblePadding || "10px";
     element.innerHTML += template(tmpl, settings);
 }
 
